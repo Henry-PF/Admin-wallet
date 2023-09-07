@@ -6,9 +6,14 @@ const Sidebar = () => {
     const navigate = useNavigate()
     return (
         <>
-            <nav className='w-auto vh-100' >
+            <nav className='w-auto vh-100 position-sticky top-0' >
                 <ul className="nav w-100 h-100 d-flex flex-column justify-content-center align-items-start position-relative">
                     <p className='position-absolute top-0 m-3 pt-4 fs-4 text-white text-center'>Panel de Administrador</p>
+                    <li className="nav-item sidebar-item py-2 w-100">
+                        <Link className="nav-link text-white" to="/admin">
+                            Dashboard
+                        </Link>
+                    </li>
                     <li className="nav-item sidebar-item py-2 w-100">
                         <Link className="nav-link text-white" to="/admin/usuarios">
                             Usuarios
@@ -17,6 +22,11 @@ const Sidebar = () => {
                     <li className="nav-item sidebar-item py-2 w-100">
                         <Link className="nav-link text-white" to="/admin/transacciones">
                             Transacciones
+                        </Link>
+                    </li>
+                    <li className="nav-item sidebar-item py-2 w-100">
+                        <Link className="nav-link text-white" to="/admin/planes">
+                            Planes
                         </Link>
                     </li>
 
