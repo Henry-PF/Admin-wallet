@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Sidebar from '../Sidebar/Sidebar';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllUsers } from '../../redux/actions';
+import { getAllUsers, searchUsers, setCurrentPage } from '../../redux/actions';
 import './usuarios.css';
 
 const inconBan = <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><path d="M367.2 412.5L99.5 144.8C77.1 176.1 64 214.5 64 256c0 106 86 192 192 192c41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3C434.9 335.9 448 297.5 448 256c0-106-86-192-192-192c-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z" /></svg>
@@ -14,22 +14,45 @@ const iconDelete = <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox=
 const Usuarios = () => {
     const dispatch = useDispatch();
     const users = useSelector(state => state.users);
-    const [data, setData] = useState({
+    console.log(users);
+    const currentPage = useSelector(state => state.currentPage)
+    const [userFilter, setUserFilter] = useState({
         usuario: '',
         nombre: '',
         email: '',
-    })
+    });
+
+    const itemsPerPage = 10;
+
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = Array.isArray(users.data) ? users.data.slice(indexOfFirstItem, indexOfLastItem) : [];
+
+
+    const totalPages = Math.ceil(users.data?.length / itemsPerPage);
+
+    const handlePageChange = (newPage) => {
+        dispatch(setCurrentPage(newPage))
+    };
+
     const handleChange = (event) => {
         const { name, value } = event.target;
-        setData({
-            ...data,
+        setUserFilter({
+            ...userFilter,
             [name]: value,
         });
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        const { usuario, nombre, email } = userFilter;
 
-    }
+        const filters = {
+            usuario, nombre, email
+        }
+        dispatch(searchUsers(filters));
+        dispatch(setCurrentPage(1))
+    };
 
     useEffect(() => {
         dispatch(getAllUsers());
@@ -50,14 +73,14 @@ const Usuarios = () => {
                                     type="search"
                                     name='usuario'
                                     placeholder="Buscar por Usuario..."
-                                    value={data.usuario}
+                                    value={userFilter.usuario}
                                     onChange={handleChange}
                                     aria-label="Search"
                                 />
                                 <input
                                     className="form-control me-2"
                                     name='nombre'
-                                    value={data.nombre}
+                                    value={userFilter.nombre}
                                     onChange={handleChange}
                                     type="search"
                                     placeholder="Buscar por Nombre"
@@ -65,7 +88,7 @@ const Usuarios = () => {
                                 <input
                                     className="form-control me-2"
                                     name='email'
-                                    value={data.email}
+                                    value={userFilter.email}
                                     onChange={handleChange}
                                     type="search"
                                     placeholder="Buscar por Correo Electronico" aria-label="Search" />
@@ -86,19 +109,40 @@ const Usuarios = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {users.data?.map((user) => (
+                                {currentItems?.map((user) => (
                                     <tr className='text-center' key={user.id}>
                                         <td>{user.datos_persona.id}</td>
                                         <td>{user.nombre_usuario}</td>
                                         <td>{user.datos_persona.nombre} {user.datos_persona.apellido}</td>
                                         <td>{user.datos_persona.correo_electronico}</td>
-                                        <td>{iconEdit}</td>
                                         <td>{inconBan}</td>
                                         <td>{iconDelete}</td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
+
+                        <nav aria-label="Page navigation example">
+                            <ul className="pagination">
+                                <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                                    <button className="page-link" aria-label="Previous" onClick={() => handlePageChange(currentPage - 1)}>
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </button>
+                                </li>
+                                {Array.from({ length: totalPages }).map((_, index) => (
+                                    <li className={`page-item ${currentPage === index + 1 ? 'active' : ''}`} key={index}>
+                                        <a className="page-link" href="#" onClick={() => handlePageChange(index + 1)}>
+                                            {index + 1}
+                                        </a>
+                                    </li>
+                                ))}
+                                <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                                    <button className="page-link" aria-label="Next" onClick={() => handlePageChange(currentPage + 1)}>
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </button>
+                                </li>
+                            </ul>
+                        </nav>
                     </div>
                 </div>
             </div>
