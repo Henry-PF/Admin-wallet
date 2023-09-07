@@ -4,7 +4,7 @@ import { GET_ALL_PLANS, GET_ALL_USERS, GET_ALL_TRANSACTIONS, GET_ALL_BALANCES } 
 export const getAllUsers = () => {
     return async dispatch => {
         try {
-            const { data } = await axios.get('http://localhost:3001/usuarios/getAll');
+            const { data } = await axios.get('https://backend-6ao2.onrender.com/usuarios/getAll');
             dispatch({
                 type: GET_ALL_USERS,
                 payload: data
@@ -18,7 +18,7 @@ export const getAllUsers = () => {
 export const getAllPlans = () => {
     return async dispatch => {
         try {
-            const { data } = await axios.get('http://localhost:3001/plans');
+            const { data } = await axios.get('https://backend-6ao2.onrender.com/plans');
             dispatch({
                 type: GET_ALL_PLANS,
                 payload: data
@@ -32,7 +32,7 @@ export const getAllPlans = () => {
 export const getAllTransactions = () => {
     return async dispatch => {
         try {
-            const { data } = await axios.get('http://localhost:3001/transactions');
+            const { data } = await axios.get('https://backend-6ao2.onrender.com/transactions');
             dispatch({
                 type: GET_ALL_TRANSACTIONS,
                 payload: data
@@ -46,7 +46,7 @@ export const getAllTransactions = () => {
 export const getAllBalances = () => {
     return async dispatch => {
         try {
-            const { data } = await axios.get('http://localhost:3001/saldos');
+            const { data } = await axios.get('https://backend-6ao2.onrender.com/saldos');
             console.log(data);
             dispatch({
                 type: GET_ALL_BALANCES,
