@@ -37,7 +37,7 @@ const FormEdit = ({ id, nombre, costo, duracion, contenido }) => {
         const { nombre, costo, duracion, contenido } = values;
 
         try {
-            const { data } = await axios.put(`http://localhost:3001/plans/${id}`, {
+            const { data } = await axios.put(`https://backend-6du3.onrender.com/plans/${id}`, {
                 nombre,
                 costo,
                 duracion,

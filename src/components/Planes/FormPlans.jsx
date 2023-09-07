@@ -33,7 +33,7 @@ const FormPlans = (props) => {
         const { nombre, costo, duracion, contenido } = values;
 
         try {
-            const { data } = await axios.post('http://localhost:3001/plans', {
+            const { data } = await axios.post('https://backend-6du3.onrender.com/plans', {
                 nombre,
                 costo,
                 duracion,
