@@ -64,7 +64,7 @@ const Login = () => {
 
         dispatch(userLogin(email, password))
         try {
-            const { data } = await axios.post('http://localhost:3001/auth/login', {
+            const { data } = await axios.post('https://backend-6du3.onrender.com/auth/login', {
                 user: email,
                 pass: password,
             });

@@ -16,7 +16,7 @@ const FormDelete = ({ id }) => {
 
     const handleDelete = async () => {
         try {
-            const { data } = await axios.delete(`http://localhost:3001/plans/${id}`)
+            const { data } = await axios.delete(`https://backend-6du3.onrender.com/plans/${id}`)
             dispatch(getAllPlans())
             handleClose()
             swal('Plan Eliminado Exitosamente')

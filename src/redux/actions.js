@@ -4,7 +4,7 @@ import { GET_ALL_PLANS, GET_ALL_USERS, GET_ALL_TRANSACTIONS, SEARCH_USERS, SET_C
 export const getAllUsers = () => {
     return async dispatch => {
         try {
-            const { data } = await axios.get('http://localhost:3001/usuarios/getAll');
+            const { data } = await axios.get('https://backend-6du3.onrender.com/usuarios/getAll');
             dispatch({
                 type: GET_ALL_USERS,
                 payload: data
@@ -18,7 +18,7 @@ export const getAllUsers = () => {
 export const getAllPlans = () => {
     return async dispatch => {
         try {
-            const { data } = await axios.get('http://localhost:3001/plans');
+            const { data } = await axios.get('https://backend-6du3.onrender.com/plans');
             dispatch({
                 type: GET_ALL_PLANS,
                 payload: data
@@ -32,7 +32,7 @@ export const getAllPlans = () => {
 export const getAllTransactions = () => {
     return async dispatch => {
         try {
-            const { data } = await axios.get('http://localhost:3001/transactions');
+            const { data } = await axios.get('https://backend-6du3.onrender.com/transactions');
             dispatch({
                 type: GET_ALL_TRANSACTIONS,
                 payload: data
@@ -46,7 +46,7 @@ export const getAllTransactions = () => {
 export const getAllBalances = () => {
     return async dispatch => {
         try {
-            const response = await axios.get('http://localhost:3001/saldos');
+            const response = await axios.get('https://backend-6du3.onrender.com/saldos');
 
             dispatch({
                 type: GET_ALL_BALANCES,
@@ -61,7 +61,7 @@ export const getAllBalances = () => {
 export const searchUsers = (filteredUsers) => {
     return async (dispatch) => {
         try {
-            const response = await axios.get('http://localhost:3001/usuarios/filter', {
+            const response = await axios.get('https://backend-6du3.onrender.com/usuarios/filter', {
                 params: filteredUsers,
             });
 
@@ -81,7 +81,7 @@ export const searchUsers = (filteredUsers) => {
 // export const searchTransactions = (filteredTransaction) => {
 //     return async (dispatch) => {
 //         try {
-//             const response = await axios.get('http://localhost:3001/transactions/search', {
+//             const response = await axios.get('https://backend-6du3.onrender.com/transactions/search', {
 //                 params: filteredTransaction,
 //             });
 
@@ -107,7 +107,7 @@ export const setCurrentPage = (page) => {
 
 export const userLogin = (email, password) => async (dispatch) => {
     try {
-        const { data } = await axios.post('http://localhost:3001/auth/login', {
+        const { data } = await axios.post('https://backend-6du3.onrender.com/auth/login', {
             user: email,
             pass: password,
         });
