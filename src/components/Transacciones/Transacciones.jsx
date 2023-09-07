@@ -16,6 +16,8 @@ const Transacciones = () => {
     const currentPage = useSelector(state => state.currentPage)
     const itemsPerPage = 10;
 
+    console.log(transactions);
+
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = transactions?.slice(indexOfFirstItem, indexOfLastItem);
@@ -114,8 +116,8 @@ const Transacciones = () => {
                                         <tr key={index}>
                                             <th scope="row">{index}</th>
                                             <td>{transaction.id}</td>
-                                            <td>{transaction.id}</td>
-                                            <td>{transaction.id}</td>
+                                            <td>{transaction.id_usuario_emisor}</td>
+                                            <td>{transaction.id_usuario_receptor}</td>
                                             <td>{transaction.monto}</td>
                                             <td>{transaction.fecha}</td>
 
