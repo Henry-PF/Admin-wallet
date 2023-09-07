@@ -1,14 +1,14 @@
 import axios from 'axios';
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from 'react-redux';
-import { Await, Link, Navigate, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { useDispatch } from 'react-redux';
+import { useNavigate } from "react-router-dom";
 import styles from "./Login.module.css";
 import swal from "sweetalert";
+import { userLogin } from '../redux/actions';
 
 const Login = () => {
-    const dispatch = useDispatch();
     const navigate = useNavigate();
-
+    const dispatch = useDispatch();
     const [errors, setErrors] = useState({});
     const [access, setAccess] = useState(false);
     const [showPwd, setShowPwd] = useState(false);
@@ -62,13 +62,14 @@ const Login = () => {
         event.preventDefault();
         const { email, password } = userData;
 
+        dispatch(userLogin(email, password))
         try {
             const { data } = await axios.post('http://localhost:3001/auth/login', {
                 user: email,
                 pass: password,
             });
 
-            if (await data.token && data.data.usuarios[0].tipo_usuario.nombre === 'admin') {
+            if (await data.token && data.data.usuarios[0].tipo_usuario.nombre === 'Administrador') {
                 return navigate('/admin');
             } else {
                 swal(data.error)

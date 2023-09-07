@@ -7,7 +7,8 @@ const UserGraph = () => {
     const dispatch = useDispatch();
     const users = useSelector(state => state.users);
     const balances = useSelector(state => state.balances)
-    const transactions = useSelector(state => state.balances)
+    const transactions = useSelector(state => state.transactions.length)
+
     const userLength = users.data?.length;
 
     useEffect(() => {

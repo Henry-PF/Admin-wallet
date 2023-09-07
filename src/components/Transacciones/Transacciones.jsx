@@ -1,11 +1,49 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Sidebar from '../Sidebar/Sidebar'
-import { getAllTransactions } from '../../redux/actions';
+import { getAllTransactions, searchTransactions, setCurrentPage } from '../../redux/actions';
+
 
 const Transacciones = () => {
     const dispatch = useDispatch();
+    const [data, setData] = useState({
+        emisor: '',
+        receptor: '',
+        monto: '',
+        fecha: ''
+    });
     const transactions = useSelector(state => state.transactions);
+    const currentPage = useSelector(state => state.currentPage)
+    const itemsPerPage = 10;
+
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = transactions?.slice(indexOfFirstItem, indexOfLastItem);
+
+    const totalPages = Math.ceil(transactions?.length / itemsPerPage);
+
+    const handlePageChange = (newPage) => {
+        dispatch(setCurrentPage(newPage))
+    };
+
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setData({
+            ...data,
+            [name]: value,
+        });
+    }
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        const { emisor, receptor, monto, fecha } = data;
+
+        const datos = {
+            emisor, receptor, monto, fecha
+        }
+        // dispatch(searchTransactions(datos));
+        dispatch(setCurrentPage(1))
+    };
 
     useEffect(() => {
         dispatch(getAllTransactions());
@@ -20,14 +58,43 @@ const Transacciones = () => {
                     </div>
                     <div className="col d-flex align-items-center justify-content-center flex-column">
                         <div className='m-2'>
-                            <form className="d-flex" role="search">
-                                <input className="form-control me-2" type="search" placeholder="Buscar por Emisor" aria-label="Search" />
-                                <input className="form-control me-2" type="search" placeholder="Buscar por Destinatario" aria-label="Search" />
-                                <input className="form-control me-2" type="search" placeholder="Buscar por Monto" aria-label="Search" />
-                                <input className="form-control me-2" type="search" placeholder="Buscar por Fecha" aria-label="Search" />
-                                <button className="btn btn-outline-dark" type="submit">Buscar</button>
+                            <form className="d-flex" role="search" onSubmit={handleSubmit}>
+                                <input
+                                    className="form-control me-2"
+                                    type="search"
+                                    name='emisor'
+                                    placeholder="Buscar por Emisor..."
+                                    value={data.emisor}
+                                    onChange={handleChange}
+                                    aria-label="Search"
+                                />
+                                <input
+                                    className="form-control me-2"
+                                    name='receptor'
+                                    value={data.receptor}
+                                    onChange={handleChange}
+                                    type="search"
+                                    placeholder="Buscar por Receptor"
+                                    aria-label="Search" />
+                                <input
+                                    className="form-control me-2"
+                                    name='monto'
+                                    value={data.monto}
+                                    onChange={handleChange}
+                                    type="search"
+                                    placeholder="Buscar por Correo Electronico" aria-label="Search" />
+                                <input
+                                    className="form-control me-2"
+                                    name='fecha'
+                                    value={data.fecha}
+                                    onChange={handleChange}
+                                    type="search"
+                                    placeholder="Buscar por Correo Fecha" aria-label="Search" />
+                                <button
+                                    className="btn btn-outline-dark"
+                                    type="submit"
+                                >Buscar</button>
                             </form>
-
                         </div>
                         <table className="table">
                             <thead>
@@ -43,8 +110,8 @@ const Transacciones = () => {
                             </thead>
                             <tbody>
                                 {
-                                    transactions?.map((transaction, index) => (
-                                        <tr>
+                                    currentItems?.map((transaction, index) => (
+                                        <tr key={index}>
                                             <th scope="row">{index}</th>
                                             <td>{transaction.id}</td>
                                             <td>{transaction.id}</td>
@@ -59,18 +126,22 @@ const Transacciones = () => {
                         </table>
                         <nav aria-label="Page navigation example">
                             <ul className="pagination">
-                                <li className="page-item">
-                                    <a className="page-link" href="#" aria-label="Previous">
+                                <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                                    <button className="page-link" aria-label="Previous" onClick={() => handlePageChange(currentPage - 1)}>
                                         <span aria-hidden="true">&laquo;</span>
-                                    </a>
+                                    </button>
                                 </li>
-                                <li className="page-item"><a className="page-link" href="#">1</a></li>
-                                <li className="page-item"><a className="page-link" href="#">2</a></li>
-                                <li className="page-item"><a className="page-link" href="#">3</a></li>
-                                <li className="page-item">
-                                    <a className="page-link" href="#" aria-label="Next">
+                                {Array.from({ length: totalPages }).map((_, index) => (
+                                    <li className={`page-item ${currentPage === index + 1 ? 'active' : ''}`} key={index}>
+                                        <a className="page-link" href="#" onClick={() => handlePageChange(index + 1)}>
+                                            {index + 1}
+                                        </a>
+                                    </li>
+                                ))}
+                                <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                                    <button className="page-link" aria-label="Next" onClick={() => handlePageChange(currentPage + 1)}>
                                         <span aria-hidden="true">&raquo;</span>
-                                    </a>
+                                    </button>
                                 </li>
                             </ul>
                         </nav>

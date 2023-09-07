@@ -35,9 +35,6 @@
     text-align: center;
 }
 
-
-
-
 .msform {
     margin: auto;
     color: white;
@@ -184,13 +181,6 @@
     justify-content: center;
     align-items: center;
     margin-top: 5px;
-}
-
-span {
-    color: red;
-    font-weight: bolder;
-    font-size: 12px;
-    margin-left: 100px;
 }
 
 .btn_google_container {
